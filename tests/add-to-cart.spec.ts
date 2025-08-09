@@ -9,15 +9,10 @@ test('should add all products to cart, validate names and prices, and checkout',
 
   // 1. Login
   await page.goto(baseURL);
-  await page.waitForTimeout(1500);
   await page.fill('#user-name', username);
-  await page.waitForTimeout(1000);
   await page.fill('#password', password);
-  await page.waitForTimeout(1000);
   await page.click('#login-button');
-  await page.waitForTimeout(1500);
   await expect(page).toHaveURL(/.*inventory\.html/);
-  await page.waitForTimeout(1000);
 
   // 2. Add all products from DB
   for (let i = 0; i < products.length; i++) {
@@ -25,22 +20,15 @@ test('should add all products to cart, validate names and prices, and checkout',
     const price = prices[i];
     const productCard = page.locator('.inventory_item').filter({ hasText: name });
     await expect(productCard).toBeVisible();
-    await page.waitForTimeout(1000);
     await expect(productCard.locator('.inventory_item_price')).toHaveText(`$${price}`);
-    await page.waitForTimeout(1000);
     await productCard.locator('button:has-text("Add to cart")').click();
-    await page.waitForTimeout(1000);
     await expect(productCard.locator('.inventory_item_name')).toHaveText(name);
-    await page.waitForTimeout(1000);
     await expect(productCard.locator('.inventory_item_price')).toHaveText(`$${price}`);
-    await page.waitForTimeout(1000);
   }
 
   // 3. Go to cart
   await page.click('.shopping_cart_link');
-  await page.waitForTimeout(1500);
   await expect(page).toHaveURL(/.*cart\.html/);
-  await page.waitForTimeout(1000);
 
   // 4. Validate all products and prices in cart
   for (let i = 0; i < products.length; i++) {
@@ -48,17 +36,13 @@ test('should add all products to cart, validate names and prices, and checkout',
     const price = prices[i];
     const cartItem = page.locator('.cart_item').filter({ hasText: name });
     await expect(cartItem.locator('.inventory_item_name')).toHaveText(name);
-    await page.waitForTimeout(1000);
     await expect(cartItem.locator('.inventory_item_price')).toHaveText(price);
-    await page.waitForTimeout(1000);
   }
 
   // 5. Checkout
   const checkoutLink = page.locator('a.btn_action.checkout_button');
   await expect(checkoutLink).toBeVisible();
-  await page.waitForTimeout(1000);
   await checkoutLink.click();
-  await page.waitForTimeout(1500);
   await expect(page).toHaveURL(/.*checkout-step-one\.html/);
 });
 
