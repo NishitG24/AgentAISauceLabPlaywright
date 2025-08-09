@@ -25,6 +25,12 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
+
+      - name: Create .env file
+        run: |
+          echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" >> .env
+          echo "LOGIN_URL=${{ secrets.LOGIN_URL }}" >> .env
+
       - name: Run Playwright tests
         run: npx playwright test
 
